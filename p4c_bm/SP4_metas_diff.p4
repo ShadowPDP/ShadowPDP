@@ -178,6 +178,10 @@ table record_shadow_result {
 
 /* conparator */
 /* send the pkt out to the controller*/
+action _send_pkt_to_controller(port) {
+    modify_field(standard_metadata.egress_spec, port);
+}
+
 action _tmp_handle_pkt(port) {
     modify_field(standard_metadata.egress_spec, port);
 }
@@ -185,6 +189,7 @@ action _tmp_handle_pkt(port) {
 table handle_comparator_error {
     actions {
         _tmp_handle_pkt;
+        _send_pkt_to_controller;
     }
 }
 

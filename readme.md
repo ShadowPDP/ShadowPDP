@@ -34,10 +34,10 @@ ShadowP4 compiler bmv2 (optional) arguments:
 
 For example, we can compiler the AB testing demo by the following command, the merged output json file for bmv2 is `switch_merged.json`:
 ```
-python ShadowP4c-bmv2.py --real_source         tests/Demo/merge-simple-AB/switch_prod.p4 \
-                         --shadow_source       tests/Demo/merge-simple-AB/switch_test.p4 \
-                         --json_mg             tests/Demo/merge-simple-AB/switch_merged.json \
-                         --gen_dir             tests/Demo/merge-simple-AB \
+python ShadowP4c-bmv2.py --real_source         cases/merge-simple-AB/switch_prod.p4 \
+                         --shadow_source       cases/merge-simple-AB/switch_test.p4 \
+                         --json_mg             cases/merge-simple-AB/switch_merged.json \
+                         --gen_dir             cases/merge-simple-AB \
                          --AB-testing
 ```
 
@@ -74,32 +74,38 @@ We can also generate the visible graph of merged parser and control flow using `
 
 ### Differential testing
 
+- Before testing
+You should make sure that the bmv2 target are installed in the `/usr/local/bin/`.
+
+
 - Merge two P4 programs
 
 The following command example shows how to merge two P4 programs for Differential Testing:
 ```
-python ShadowP4c-bmv2.py --real_source   tests/Demo/merge-DiffTesting/router_prod.p4 \
-                        --shadow_source       tests/Demo/merge-DiffTesting/router_test.p4 \
-                        --json                tests/Demo/merge-DiffTesting/router_prod.json \
-                        --json_s              tests/Demo/merge-DiffTesting/router_test.json \
-                        --json_mg             tests/Demo/merge-DiffTesting/router_merged.json \
-                        --gen_dir             tests/Demo/merge-DiffTesting \
+python ShadowP4c-bmv2.py --real_source   cases/merge-DiffTesting/router_prod.p4 \
+                        --shadow_source       cases/merge-DiffTesting/router_test.p4 \
+                        --json                cases/merge-DiffTesting/router_prod.json \
+                        --json_s              cases/merge-DiffTesting/router_test.json \
+                        --json_mg             cases/merge-DiffTesting/router_merged.json \
+                        --gen_dir             cases/merge-DiffTesting \
                         --gen-fig \
                         --Diff-testing
 ```
+In this case, the production version is the simple router + ; the 
+
 
 - Run the merged P4 program
 
 We can get the merged json file for bmv2 in the `gen_dir`. Here is an example to run the merged program in mininet.
 ```
-sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_switch --num-host 4 --json tests/Demo/merge-DiffTesting/router_merged.json
+sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_switch --num-host 4 --json cases/merge-DiffTesting/router_merged.json
 ```
 
 - Runtime populate production/testing tables
 
 In the merged P4 program, there are three kinds of table can be configured through runtime CLI: 1) production program tables, 2) testing program tables and 3) shadow traffic control tables.
 
-For the Differential testing case, we give three files in `tests/Demo/merge-DiffTesting` as the detailed examples of run-time configure commands.
+For the Differential testing case, we give three files in `cases/merge-DiffTesting` as the detailed examples of run-time configure commands.
 
     - `commands_prod.txt` : run-time example commands for production program
 
@@ -109,18 +115,40 @@ For the Differential testing case, we give three files in `tests/Demo/merge-Diff
 
 Note that, as those entries are used for the single P4 programs before merging, operates should translate them into entries adapted for the merged P4 program before configuring them according to `ShadowP4Configure`. SPM can make it with:
 ```
-python SPM/SPM_translate_cmd.py -cfg tests/Demo/merge-DiffTesting/ShadowP4Configure -c tests/Demo/merge-DiffTesting/commands_test.txt -n tests/Demo/merge-DiffTesting/commands_test_new.txt
+python SPM/SPM_translate_cmd.py -cfg cases/merge-DiffTesting/ShadowP4Configure -c cases/merge-DiffTesting/commands_test.txt -n cases/merge-DiffTesting/commands_test_new.txt
 ```
 
 Next we can install those new commands.
 ```
-sudo python tools/runtime_CLI.py < tests/Demo/merge-DiffTesting/commands_test_new.txt 
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_test_new.txt 
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_prod.txt 
 ```
 
 - Runtime configure STC tables and testing error handles
 For the STC, we set packets with destination L2 address `00:04:00:00:00:01` to testing packets.
+```
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_STC.txt 
+```
 
 For the testing error handles, we can configure the `handle_comparator_error` table to forward the error packet to controller.
+
+
+- Dectect the difference in real time
+
+First open the xterm of the host/controller nodes connected to the ports of the switch in mininet CLI:
+```
+xterm h1 h2 h3
+```
+
+Second, we send testing traffic from `h1` to `h2` using tcpreply in xterm of `h1`:
+```
+tcpreplay -i eth0 cases/pcap/h1_h2.pcap
+```
+
+Third, observed the differential outputs from the controller port in `h3`. We can observe the output packet using either wiresharek or tcpdump as follows:
+```
+tcpdump -i eth0
+```
 
 
 ## Advanced features

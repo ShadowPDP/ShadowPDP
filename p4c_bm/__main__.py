@@ -103,10 +103,10 @@ def get_parser():
     parser.add_argument('--plugin', dest='plugin_list', action="append",
                         default=[],
                         help="list of plugins to generate templates")
-    parser.add_argument('--openflow-mapping-dir',
-                        help="Directory of openflow mapping files")
-    parser.add_argument('--openflow-mapping-mod',
-                        help="Openflow mapping module name -- not a file name")
+    # parser.add_argument('--openflow-mapping-dir',
+    #                     help="Directory of openflow mapping files")
+    # parser.add_argument('--openflow-mapping-mod',
+    #                     help="Openflow mapping module name -- not a file name")
     parser.add_argument('--keep-pragmas', action='store_true',
                         help="Propagate pragmas to JSON file when applicable",
                         default=False)
@@ -557,7 +557,7 @@ def main():
             cmd2 = './mwis/GWMIN_alg/bin/mwis '+ingress_table_graph+' '+ingress_res_file + " >> tmp/tmp.res"
             print cmd2
             os.system(cmd2)
-            return
+            # return
 
     ## 4.0 read heuristic result
 
@@ -570,7 +570,7 @@ def main():
             h_s_egress_graph.SP4_merge_id.append(1)
 
             if OPT_get_tables_summary:                
-                h_s_ingress_graph.SP4_reduce_reuse_tables(h_s)
+                h_r_ingress_graph.SP4_reduce_reuse_tables(h_s)
 
     ## 5.0 merging hlir
             if AB_T:
