@@ -1,13 +1,23 @@
-# ShadowP4 compiler
+In this file, we show 1) the main features of ShadowP4 currently supported; 2) how to run the code step-by-step to produce the main experiment results on Bmv2 target.
 
-## Features
+## ShadowP4 Overview
+ShadowP4 is a framework containing two primitives: building modular P4 programs by code merge and testing P4 programs with flexible operators. Specifically, the main features supported in the repository are shown below.
 
-- ShadowP4 compiler can merge two P4 programs to one fully automated. The target is Bmv2.
-- Support A-B testing. The traffic for A-B testing is configurable at runtime through flow entry in STC table. 
-- Support Differential testing, as described in the paper.
+For merging P4 programs:
+- ShadowP4 Compiler can merge two P4 programs to one fully automated. The merged P4 program allows the two P4 programs running side by side in single P4 target Bmv2. 
+- ShadowP4 Management provides runtime messages translation between the control plane and the merged P4 Programs, and uses the ShadowConfiguration to determine how to appropriately modify the messages.
 
-## Merge two P4 programs
-The following is the commands to merge two P4 program:
+For testing operators:
+- A-B testing operator. The traffic for A-B testing is configurable at runtime through flow entry in STC table. 
+- Differential testing operator. Similar with A-B testing, traffic can be split across all versions and the output is compared, as described in the paper.
+
+Besides, we will give a step-by-step guide to show the workflow of ShadowP4 and how to run real traffic on the it.
+
+
+## 1. Merging P4 programs
+
+### ShadowP4 merging interface
+The following is the commands to merge two P4 program with notes to inputs:
 ```
 usage: ShadowP4c-bmv2.py [-h] [--real_source source]
                          [--shadow_source SHADOW_SOURCE] [--json_s JSON_S]
@@ -32,7 +42,11 @@ ShadowP4 compiler bmv2 (optional) arguments:
   --Diff-testing         Merging for Differential Testing case
 ```
 
-For example, we can compiler the AB testing demo by the following command, the merged output json file for bmv2 is `switch_merged.json`:
+The output is a JSON configuration for the P4 target bmv4 switch, as well as a configuration file `ShadowP4Configure` in the generated directory. 
+
+SPM can translate the control messages, such as the flow entry add messages. More detail are in `SPM` directory.
+<!-- 
+For example, we can compile the A-B testing demo by the following command, the merged output json file for bmv2 is `switch_merged.json`:
 ```
 python ShadowP4c-bmv2.py --real_source         cases/merge-simple-AB/switch_prod.p4 \
                          --shadow_source       cases/merge-simple-AB/switch_test.p4 \
@@ -40,15 +54,22 @@ python ShadowP4c-bmv2.py --real_source         cases/merge-simple-AB/switch_prod
                          --gen_dir             cases/merge-simple-AB \
                          --AB-testing
 ```
+#### Shadow configure management and agent
+ShadowP4 compiler will generate a ShadowP4 configure file in the generated directory, name `ShadowP4Configure`. SPM can translate the control messages, such as the flow entry add messages. More detail are in `SPM` directory. -->
+
+
+## 2. Supporting flexible testing operators
+Operators can customize the testing configuration files to support flexible testing operations, which is described in section 6.2 of the submission. For A-B testing the file is `p4c_bm/SP4_metas_ab.p4` and for Differential testing the file is `p4c_bm/SP4_metas_diff.p4`. The following describes two key parts `Shadow Traffic Control` and `Comparator`.
+
 
 
 ### Shadow Traffic Control
-STC is used to manage the traffic for both testing program and production program. STC support four action current:
+The Shadow Traffic Control (STC) module is reconfigurable. We can set the match fields of the STC tables `shadow_traffic_control` for the shadow traffic classification. STC is used to manage the traffic for both both A-B testing and Differential testing. STC support four action current:
 
-1) Action `SP4_add_shadow_tag`: turn the production to testing traffic
-2) Action `SP4_remove_shadow_tag`: turn the testing traffic to production traffic
-3) Action `goto_testing_pipe`: send the packet to testing pipeline
-4) Action `goto_production_pipe`: send the packet to production pipeline
+- Action `SP4_add_shadow_tag`: turn the production to testing traffic
+- Action `SP4_remove_shadow_tag`: turn the testing traffic to production traffic
+- Action `goto_testing_pipe`: send the packet to testing pipeline
+- Action `goto_production_pipe`: send the packet to production pipeline
 
 Each flow entry in STC table is associated with one action. All the traffic matched the flow will be processed by the action. The default match fields of the flow entry is dest mac address. Operators can custom the match fields in the file `SP_metas`, at line 104 `reads` fields, the following gives a example for the match fields:
 ```
@@ -62,102 +83,11 @@ By changing the flow entry in STC, operators can management the shadow traffic a
 table_add shadow_traffic_control goto_testing_pipe 00:04:00:00:00:01 =>
 ``` 
 
-### Shadow configure management and agent
-ShadowP4 compiler will generate a ShadowP4 configure file in the generated directory, name `ShadowP4Configure`. SPM can translate the control messages, such as the flow entry add messages. More detail are in `SPM` directory.
+### Comparator
 
+In Differential testing, at the end of the pipeline is the Comparator module, which can compare the output of testing version with the outputs of the production version. Operators can configure Comparator to report a message along with the packet with comparing outcomes to the controller if the values are not equal.
 
-
-### Visualization merging
-We can also generate the visible graph of merged parser and control flow using `--gen-fig` parameter. The figures will be generated in the specific directory.
-
-
-
-### Differential testing
-
-- Before testing
-You should make sure that the bmv2 target are installed in the `/usr/local/bin/`.
-
-
-- Merge two P4 programs
-
-The following command example shows how to merge two P4 programs for Differential Testing:
-```
-python ShadowP4c-bmv2.py --real_source   cases/merge-DiffTesting/router_prod.p4 \
-                        --shadow_source       cases/merge-DiffTesting/router_test.p4 \
-                        --json                cases/merge-DiffTesting/router_prod.json \
-                        --json_s              cases/merge-DiffTesting/router_test.json \
-                        --json_mg             cases/merge-DiffTesting/router_merged.json \
-                        --gen_dir             cases/merge-DiffTesting \
-                        --gen-fig \
-                        --Diff-testing
-```
-In this case, the production version is the simple router + ; the 
-
-
-- Run the merged P4 program
-
-We can get the merged json file for bmv2 in the `gen_dir`. Here is an example to run the merged program in mininet.
-```
-sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_switch --num-host 4 --json cases/merge-DiffTesting/router_merged.json
-```
-
-- Runtime populate production/testing tables
-
-In the merged P4 program, there are three kinds of table can be configured through runtime CLI: 1) production program tables, 2) testing program tables and 3) shadow traffic control tables.
-
-For the Differential testing case, we give three files in `cases/merge-DiffTesting` as the detailed examples of run-time configure commands.
-
-    - `commands_prod.txt` : run-time example commands for production program
-
-    - `commands_test.txt`: run-time example commands for testing program
-
-    - `commands_STC.txt`: run-time example commands for shadow traffic control. 
-
-Note that, as those entries are used for the single P4 programs before merging, operates should translate them into entries adapted for the merged P4 program before configuring them according to `ShadowP4Configure`. SPM can make it with:
-```
-python SPM/SPM_translate_cmd.py -cfg cases/merge-DiffTesting/ShadowP4Configure -c cases/merge-DiffTesting/commands_test.txt -n cases/merge-DiffTesting/commands_test_new.txt
-```
-
-Next we can install those new commands.
-```
-sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_test_new.txt 
-sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_prod.txt 
-```
-
-- Runtime configure STC tables and testing error handles
-For the STC, we set packets with destination L2 address `00:04:00:00:00:01` to testing packets.
-```
-sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_STC.txt 
-```
-
-For the testing error handles, we can configure the `handle_comparator_error` table to forward the error packet to controller.
-
-
-- Dectect the difference in real time
-
-First open the xterm of the host/controller nodes connected to the ports of the switch in mininet CLI:
-```
-xterm h1 h2 h3
-```
-
-Second, we send testing traffic from `h1` to `h2` using tcpreply in xterm of `h1`:
-```
-tcpreplay -i eth0 cases/pcap/h1_h2.pcap
-```
-
-Third, observed the differential outputs from the controller port in `h3`. We can observe the output packet using either wiresharek or tcpdump as follows:
-```
-tcpdump -i eth0
-```
-
-
-## Advanced features
-
-### Reconfigure the STC muodule in both cases
-The shadow traffic module is reconfigurable. We can set the match fields of the STC tables `shadow_traffic_control` for the shadow traffic classification.
-
-### Reconfigure the comaprator fields in Differential testing
-The comparator fields is reconfigurable through two actions in the meta file `SP4_metas_xx`. We can set any fields in packet header or metadata. The two actions to record the output of P4 programs are in the following.
+The comparator fields is reconfigurable through two actions in the meta file `p4c_bm/SP4_metas_diff.p4`. We can set any fields in packet header or metadata. The two actions to record the output of P4 programs are in the following.
 ```
 /* record running result of production P4 program */
 action _rcd_production_result() {
@@ -170,15 +100,99 @@ action _rcd_shadow_result() {
 }
 ```
 
-### Reconfigure the detected error procedure in Differential testing
-It's also defined in the meta file `SP4_metas_xx`. The action to handle the error packet ia `handle_comparator_error`.
+<!-- ### Visualization merging
+We can also generate the visible graph of merged parser and control flow using `--gen-fig` parameter. The figures will be generated in the specific directory. -->
 
 
-### Beyond the A-B testing and Differential testing
-Todos.
+
+## 3. Use case: a step-by-step guide to run Differential testing
+
+In this section, we give a step-by-step guide to demonstrate how to perform Differential testing in mininet and bmv2. Note that the A-B testing operator has a similar workflow. We will also replay real traffic (in pcap file) on it to show the correctness of the merged programs.
+
+- 3.0 Required dependencies
+
+To fully evaluate the ShadowP4 building and testing primitives, three dependencies are required:
+<!-- - [p4-hlir](https://github.com/p4lang/p4-hlir/blob/master/README.md) -->
+    - [p4c-bm](https://github.com/p4lang/p4c-bm)
+    - [bmv2](https://github.com/p4lang/behavioral-model)
+    - [mininet](https://github.com/mininet/mininet)
+
+Make sure that the bmv2 target are installed in the `/usr/local/bin/` so that mininet can find it. Note that all the scripts are tested with Ubuntu 16.04 LTS.
 
 
-## To improve
+- 3.1 Merge two P4 programs
 
-- all the parser state should start from the `start` + `parse_ethernet`.
-- todo: test the action selector and action profile features.
+The following command example shows how to merge two P4 programs for Differential Testing:
+```
+python ShadowP4c-bmv2.py --real_source   cases/merge-DiffTesting/router_prod.p4 \
+                        --shadow_source       cases/merge-DiffTesting/router_test.p4 \
+                        --json                cases/merge-DiffTesting/router_prod.json \
+                        --json_s              cases/merge-DiffTesting/router_test.json \
+                        --json_mg             cases/merge-DiffTesting/router_merged.json \
+                        --gen_dir             cases/merge-DiffTesting \
+                        --gen-fig \
+                        --Diff-testing
+```
+In this case, the production version is the simple router. The shadow traffic control and comparator use the default example configuration in `p4c_bm/SP4_metas_diff.p4` file.
+
+
+- 3.2 Run the merged P4 program
+
+We can get the merged json file for bmv2 in the `gen_dir`. We create a network topology with 1 switch and 4 connected hosts. Here is an example to run the merged program in mininet.
+```
+sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_switch --num-host 4 --json cases/merge-DiffTesting/router_merged.json
+```
+
+- 3.3 Runtime populate production/testing tables
+
+In the merged P4 program, there are three kinds of table can be configured through runtime CLI: 1) production program tables, 2) testing program tables and 3) shadow traffic control tables.
+
+For the Differential testing case, we give three files in `cases/merge-DiffTesting` as the detailed examples of run-time configure commands.
+
+`commands_prod.txt` : run-time example commands for production program
+
+`commands_test.txt`: run-time example commands for testing program
+
+`commands_STC.txt`: run-time example commands for shadow traffic control. 
+
+Note that, as those entries are used for the single P4 programs before merging, operates should translate them into entries adapted for the merged P4 program before configuring them according to `ShadowP4Configure`. SPM can make it with:
+```
+python SPM/SPM_translate_cmd.py -cfg cases/merge-DiffTesting/ShadowP4Configure -c cases/merge-DiffTesting/commands_test.txt -n cases/merge-DiffTesting/commands_test_new.txt
+```
+
+Next we can install those new commands. 
+```
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_test_new.txt 
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_prod.txt 
+```
+As a simple way to generate different behavior among production and testing programs, we cam install different flow entries (i.e., one will send out to port 1 while annother program to port 2) for the same flow (i.e., the flow with dstIP=10.0.0.10/32). At the same time, we configure the Comparetor to send the outputs to controller via a special port (i.e., port 3) when difference detected. As a result, we can observe the output of Differential testing.
+
+- 3.4 Runtime configure STC tables and testing error handles
+For the STC, we set packets with destination L2 address `00:04:00:00:00:01` to testing packets.
+```
+sudo python tools/runtime_CLI.py < cases/merge-DiffTesting/commands_STC.txt 
+```
+
+For the testing error handles, we can configure the `handle_comparator_error` table to forward the error packet to controller.
+
+
+- 3.5 Tcpreply real traffic to the network
+
+First open the xterm of the host/controller nodes connected to the ports of the switch in mininet CLI:
+```
+xterm h1 h2 h3
+```
+
+Second, we send testing traffic from `h1` to `h2` using tcpreply in xterm of `h1`:
+```
+tcpreplay -i eth0 cases/pcap/h1_h2.pcap
+```
+
+
+- 3.6 Dectect the difference in real time
+  
+We can observe the differential outputs from the controller port in `h3`. We can observe the output packet using either wireshark or tcpdump as follows:
+```
+tcpdump -i eth0
+```
+If the production programs and testing has different output for the same packet, we can detect the output packet sent from the Comparator in switch.
