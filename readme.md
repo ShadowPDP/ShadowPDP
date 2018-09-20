@@ -196,3 +196,17 @@ We can observe the differential outputs from the controller port in `h3`. We can
 tcpdump -i eth0
 ```
 If the production programs and testing has different output for the same packet, we can detect the output packet sent from the Comparator in switch.
+
+
+## 4. Performance overhead evaluation
+Given two P4 programs, we can merge them into one P4 program. We can run the programs before and after merged on Bmv2: 
+```
+sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_switch --num-host 2 --json P4_programs.json
+```
+Then we can add the entries to the switch and test the throughput and latency using `iperf` tools. More detailed instructions will be available soon. Also feel free to test the overhead as you want.
+
+
+## To improve
+
+- All the parser state of P4 programs should start from the start + parse_ethernet.
+- Todo: test the action selector and action profile features.
