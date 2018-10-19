@@ -13,6 +13,7 @@ For testing operators:
 
 Besides, we will give a step-by-step guide to show the workflow of ShadowP4 and how to run real traffic on the it.
 
+Note this is the preliminary prototype of ShadowP4 implementation. The code may changes in the future evolution.
 
 ## 1. Merging P4 programs
 
