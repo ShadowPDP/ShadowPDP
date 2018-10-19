@@ -1,0 +1,38 @@
+./n30_0.1_gen.wmis
+./n30_0.2_gen.wmis
+./n30_0.3_gen.wmis
+./n30_0.4_gen.wmis
+./n50_0.1_gen.wmis
+./n50_0.2_gen.wmis
+./n50_0.3_gen.wmis
+./n50_0.4_gen.wmis
+./n80_0.1_gen.wmis
+./n80_0.2_gen.wmis
+./n80_0.3_gen.wmis
+./n80_0.4_gen.wmis
+- best weight: 5281
+- best weight: 5223
+- best weight: 5154
+- best weight: 3149
+- best weight: 10540
+- best weight: 8311
+- best weight: 6288
+- best weight: 5177
+- best weight: 12664
+- best weight: 10523
+- best weight: 8386
+- best weight: 6222
+Average solution =  7243.17
+- total processing time (s): 0.142023
+- total processing time (s): 0.149182
+- total processing time (s): 0.158104
+- total processing time (s): 0.161864
+- total processing time (s): 0.173786
+- total processing time (s): 0.170157
+- total processing time (s): 0.181824
+- total processing time (s): 0.195994
+- total processing time (s): 0.202148
+- total processing time (s): 0.206507
+- total processing time (s): 0.213109
+- total processing time (s): 0.230046
+Average total time =  0.182062

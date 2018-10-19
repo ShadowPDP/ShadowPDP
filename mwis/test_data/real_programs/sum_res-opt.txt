@@ -1,0 +1,14 @@
+./v1+v2/egress_table_graph
+./v2+v3/egress_table_graph
+./v2+v4/egress_table_graph
+- best weight: 14199
+- best weight: 11144
+- best weight: 11656
+Average solution =  12333
+- total processing time (s): 503.937
+- total processing time (s): 27.114
+- total processing time (s): 117.969
+Average total time =  216.34
+
+## Note for this output: cases v1+v3, v1+v4 and v3+v4 are not tested
+## by comment some lines between 19-35 in file `test_real_p4_opt.sh`
