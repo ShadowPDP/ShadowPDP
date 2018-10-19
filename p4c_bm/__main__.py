@@ -476,21 +476,12 @@ def main():
             if DBG_check_all_all_graph:
                 print '\nDBG|MAIN|graph info: h_r:'      
                 print h_r_ingress_graph.SP4_id2name
-                # print h_r_ingress_graph.SP4_edges
-                # print h_r_ingress_graph.SP4_adj_list
-                print
                 print h_r_egress_graph.SP4_id2name
-                # print h_r_egress_graph.SP4_edges
-                # print h_r_egress_graph.SP4_adj_list
 
                 print '\nDBG|MAIN|graph info: h_s:'
                 print h_s_ingress_graph.SP4_id2name
-                # print h_s_ingress_graph.SP4_edges
-                # print h_s_ingress_graph.SP4_adj_list
                 print
                 print h_s_egress_graph.SP4_id2name
-                # print h_s_egress_graph.SP4_edges
-                # print h_s_egress_graph.SP4_adj_list
 
                 print 'DBG|MAIN|h_r ingress reused tables:', h_r_ingress_graph.SP4_reuse_id
                 print 'DBG|MAIN|h_r egress reused tables:', h_r_egress_graph.SP4_reuse_id
@@ -521,38 +512,22 @@ def main():
             print '          Test engress nodes num = ', len(h_s_egress_graph.SP4_id2name), '  edges num = ', len(h_s_egress_graph.SP4_edges)
             print '               egress reused num = ', len(h_s_egress_graph.SP4_reuse_id)
 
-            # res_file = "tmp2.res"
-            # with open(res_file, "a") as fs:
-            #     stringss = " "
-            #     strings +=  '\nnLOG|MERGE|merging graph info:'
-            #     strings +=  '\n          Prod ingress nodes num = ' + str( len(h_r_ingress_graph.SP4_id2name) ) + '  edges num = ' + str( len(h_r_ingress_graph.SP4_edges))  
-            #     strings +=  '\n          Test ingress nodes num = ' + str( len(h_s_ingress_graph.SP4_id2name) )  + '  edges num = ' + str( len(h_s_ingress_graph.SP4_edges))  
-            #     strings +=  '\n               ingress reused num = ' + str( len(h_s_ingress_graph.SP4_reuse_id) )
-            #     strings +=  '\n' 
-            #     strings +=  '\n          Prod engress nodes num = ' + str( len(h_r_egress_graph.SP4_id2name) )  + '  edges num = ' + str( len(h_r_egress_graph.SP4_edges))  
-            #     strings +=  '\n          Test engress nodes num = ' + str( len(h_s_egress_graph.SP4_id2name) )  + '  edges num = ' + str( len(h_s_egress_graph.SP4_edges))  
-            #     strings =  '\n               egress reused num = ' + str( len(h_s_egress_graph.SP4_reuse_id) )
-            #     fs.wirte(strings)
 
-            ## 3.4.1 wirte to file
+            ## 3.4.1 write to file
             ingress_out = 'ingress'
             egress_out  = 'egress'
             h_s_ingress_graph.SP4_write_graph_to_file(args.gen_dir, ingress_out, h_r_ingress_graph)
             h_s_egress_graph.SP4_write_graph_to_file(args.gen_dir, egress_out, h_r_egress_graph)
 
-            ## 3.4.2 call the hurestic written by C
+            ## 3.4.2 call the heuristic written by C
             print 'INFO|MAIN|call wmis:'
             gen_dir = args.gen_dir
             ingress_table_graph = os.path.join(gen_dir, "ingress_table_graph.csv")
             # ingress_table_edge   = os.path.join(gen_dir, "ingress_table_edge.csv")
             ingress_res_file     = os.path.join(gen_dir, "ingress_wmis.res")
-            cmd = './mwis/mwis '+ingress_table_graph+' -o '+ingress_res_file + " >> tmp/tmp.res"
+            cmd = './mwis/bin/mwis '+ingress_table_graph+' -o '+ingress_res_file + " >> tmp/tmp.res"
             print cmd
             os.system(cmd)
-
-            # cmd1 = './mwis/mwis '+ingress_table_graph+' -B -W -o'+ingress_res_file + " >> tmp/tmp.res"
-            # print cmd1
-            # os.system(cmd1)
 
             cmd2 = './mwis/GWMIN_alg/bin/mwis '+ingress_table_graph+' '+ingress_res_file + " >> tmp/tmp.res"
             print cmd2
@@ -561,7 +536,7 @@ def main():
 
     ## 4.0 read heuristic result
 
-            # read the hurestic result
+            # read the heuristic result
             file = open(ingress_res_file, "r") 
             for each in file.readlines():
                 h_s_ingress_graph.SP4_merge_id.append(int(each))

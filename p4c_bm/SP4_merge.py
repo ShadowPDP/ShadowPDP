@@ -173,13 +173,6 @@ class Graph:
                 self.SP4_table_info[str(match_type)].append((each, depth, width))
             
 
-            # print each, 'the id is:', self.SP4_name2id[each]
-            # print each, '\n\tthe id is:', self.nodes[each].id
-            # print '     the node type is:', self.nodes[each].type_
-            # print '     the match type is:', match_type
-            # print '     the depth is:', depth
-            # print '     the width is:', width
-        # print '    table info:', self.SP4_table_info
 
     def SP4_get_table_info_summary(self, h):
 
@@ -188,23 +181,7 @@ class Graph:
             self.tb_info[key]['table_num'] = 0
             self.tb_info[key]['total_entries'] = 0
             self.tb_info[key]['total_resouce'] = 0
-        # print ':::::::', self.tb_info
-        # self.tb_info['P4_MATCH_TERNARY']['table_num'] = 0
-        # self.tb_info['P4_MATCH_TERNARY']['total_entries'] = 0
-        # self.tb_info['P4_MATCH_TERNARY']['total_resouce'] = 0
-        # self.tb_info['P4_MATCH_EXACT']['table_num'] = 0
-        # self.tb_info['P4_MATCH_EXACT']['total_entries'] = 0
-        # self.tb_info['P4_MATCH_EXACT']['total_resouce'] = 0
-        # self.tb_info['P4_MATCH_RANGE']['table_num'] = 0
-        # self.tb_info['P4_MATCH_RANGE']['total_entries'] = 0
-        # self.tb_info['P4_MATCH_RANGE']['total_resouce'] = 0
-        # self.tb_info['P4_MATCH_VALID']['table_num'] = 0
-        # self.tb_info['P4_MATCH_VALID']['total_entries'] = 0
-        # self.tb_info['P4_MATCH_VALID']['total_resouce'] = 0
-        # self.tb_info['P4_MATCH_LPM']['table_num'] = 0
-        # self.tb_info['P4_MATCH_LPM']['total_entries'] = 0
-        # self.tb_info['P4_MATCH_LPM']['total_resouce'] = 0
-        # self.tb_info['no_match']['table_num'] = 0
+
         for each in self.SP4_table_info:
             print each
             tb_num = 0
@@ -231,26 +208,6 @@ class Graph:
                   self.tb_info[key]['total_entries'],\
                   self.tb_info[key]['total_resouce']
 
-
-        # print '    ', self.tb_info['P4_MATCH_TERNARY']['table_num'], \
-        #               self.tb_info['P4_MATCH_TERNARY']['total_entries'], \
-        #               self.tb_info['P4_MATCH_TERNARY']['total_resouce'], \
-        #               self.tb_info['P4_MATCH_EXACT']['table_num'], \
-        #               self.tb_info['P4_MATCH_EXACT']['total_entries'], \
-        #               self.tb_info['P4_MATCH_EXACT']['total_resouce'], \
-        #               self.tb_info['P4_MATCH_RANGE']['table_num'], \
-        #               self.tb_info['P4_MATCH_RANGE']['total_entries'], \
-        #               self.tb_info['P4_MATCH_RANGE']['total_resouce'], \
-        #               self.tb_info['P4_MATCH_VALID']['table_num'], \
-        #               self.tb_info['P4_MATCH_VALID']['total_entries'], \
-        #               self.tb_info['P4_MATCH_VALID']['total_resouce'], \
-        #               self.tb_info['P4_MATCH_LPM']['table_num'], \
-        #               self.tb_info['P4_MATCH_LPM']['total_entries'], \
-        #               self.tb_info['P4_MATCH_LPM']['total_resouce'], \
-        #               self.tb_info['no_match']['table_num']
-
-        # pprint(self.tb_info)
-         # 1 512 6656 1 1024 14336 1 512 8192 1 8 64
 
 
     def SP4_search_reuse_node(self, s_node, h_r, g_r):
@@ -363,7 +320,6 @@ class Graph:
                 node_label = node.name
                 n_id = n_id + 1
 
-            # print 'id = ', node.id, 'name = ',node.name
 
         for node in SP4_nodes_by_name:
             node_tos_by_name = sorted(list(node.edges.keys()),
@@ -387,8 +343,6 @@ class Graph:
         self.SP4_adj_list = {key: [] for key in self.SP4_id2name}
         for u,v in self.SP4_edges:
             self.SP4_adj_list[u].append(v)
-
-        # print self.SP4_adj_list
 
     def SP4_isReachable(self, s, d):
         # for test
@@ -438,11 +392,6 @@ class Graph:
                     if (u,v) in self.SP4_merged_graph_edges:
                         continue
                     self.SP4_merged_graph_edges.append((u,v))
-
-                # DBG
-                if 0:                    
-                    print ' merge-010: isReachable: ', u, '->', v, ':',  \
-                           self.SP4_isReachable(u, v), g_2.SP4_isReachable(u, v)
                     
     def SP4_write_graph_to_file(self, gen_dir, filebase, g_2):
 
@@ -452,9 +401,7 @@ class Graph:
 
         for i in xrange(v_num):
             self.tbid2index[self.SP4_reuse_id[i]] = i + 1
-            # print 'i = ', i
-            # print 'reuse_id[i] = ', self.SP4_reuse_id[i]
-            # print 'tbid2index[id] = ', i
+
 
         with open(filename_out, "w") as out:
             
@@ -473,11 +420,6 @@ class Graph:
                     w = 1
                 out.write('n '+str(self.tbid2index[v])+ " " + str(w) + "\n")
 
-        # filename_out = os.path.join(gen_dir, filebase + "_table_edge.csv")
-
-        # with open(filename_out, "a") as out:
-            
-            # out.write(str(e_num) + "\n" )
             for u,v in self.SP4_merged_graph_edges:
                 out.write('e '+str(self.tbid2index[u]) + " " + str(self.tbid2index[v]) + "\n")
 
@@ -935,30 +877,22 @@ def print_table_names(p4_tables):
 
 def merge_headers(h_mg, h_r, h_meta):
     print 'LOG|MERGE|p4_headers'
-    # printOrderedDict(h_r.p4_headers)
-    # printOrderedDict(h_mg.p4_headers )
     h_mg.p4_headers.update(h_r.p4_headers)
     h_mg.p4_headers.update(h_meta.p4_headers)
-    # printOrderedDict(h_mg.p4_headers)
 
 
 def merge_header_instances(h_mg, h_r, h_meta):
     print 'LOG|MERGE|p4_header instances'
-    # printOrderedDict(h_r.p4_header_instances )
-    # printOrderedDict(h_mg.p4_header_instances )
     h_mg.p4_header_instances.update(h_r.p4_header_instances)
     h_mg.p4_header_instances.update(h_meta.p4_header_instances)
-    # printOrderedDict(h_mg.p4_header_instances )
+
 
 # for both AB and Diff merging
 def merge_header_actions(h_mg, h_r, h_meta):
     ## TODO-low: reduce the duplicated actions 
     print 'LOG|MERGE|actions'
-    # printOrderedDict(h_r.p4_actions)
-    # printOrderedDict(h_mg.p4_actions)
     h_mg.p4_actions.update(h_r.p4_actions)
     h_mg.p4_actions.update(h_meta.p4_actions)
-    # printOrderedDict(h_mg.p4_actions)
 
 def AB_merge_p4_tables(h_mg, h_r, h_meta):
     print 'LOG|MERGE|8 p4 tables:'
@@ -985,13 +919,10 @@ def AB_merge_p4_tables(h_mg, h_r, h_meta):
 
     # TODO: remove the duplicate nodes in set
     # key = h_mg.p4_ingress_ptr.keys()[0]
-    # print 'DBG|type', type(key), h_mg.p4_ingress_ptr[key]
-    # print 'DBG|type', type(h_mg.p4_egress_ptr), h_mg.p4_egress_ptr
     ingress_ptr_key   = h_mg.p4_tables['shadow_traffic_control']
     ingress_ptr_value = h_mg.p4_ingress_ptr[ingress_ptr_s].union(h_r.p4_ingress_ptr[ingress_ptr_r])
     h_mg.p4_ingress_ptr.clear()
     h_mg.p4_ingress_ptr[ingress_ptr_key] = ingress_ptr_value
-    # print 'DBG|ZP check:', pprint(vars(h_mg.p4_tables['shadow_traffic_control']))
 
 def set_parser_default_table_STC(p4_parse_states, h_mg):
 
@@ -1141,18 +1072,11 @@ def merge_parser_states(h_mg, h_r, h_meta):
             continue
         h_mg.p4_parse_states[parser_name] = parser_state
     
-    # for parser_name, parser_state in h_mg.p4_parse_states.items():
-    #     OPT_PRINT_NEW_PARSER = 1
-    #     if OPT_PRINT_NEW_PARSER:
-    #         print '    === merged OPT_PRINT_NEW_PARSER ===:'
-    #         print pprint(vars(parser_state))
 
     OPT_PRINT_MERGED_PARSER = 0
     if OPT_PRINT_MERGED_PARSER:
         print '\n\n\nDBG|merge parser|print merged parser|:'
         printOrderedDict(h_mg.p4_parse_states)
-        # printOrderedDict(h_r.p4_parse_states)
-        # printOrderedDict(h_meta.p4_parse_states)
 
 def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     ### The following is the merged HLIR
@@ -1197,32 +1121,20 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
 
     ### 3.X1 merge p4 fields
     '''All the header and metadata fields'''
-    # ZP: 5 feilds added in the test case:
-    # : ingress_metadata_SP4.test_packet_generate_rate
-    # : ingress_metadata_SP4.real_packet_cnt_flag
-    # : ingress_metadata_SP4.shadow_pkt_flag
-    # : ingress_metadata_SP4._padding
-    # : ipv4.flags_SP4 ipv4.flags_SP4
     print 'LOG|MERGE|X1 p4 feilds:'
-    # printOrderedDict(h_r.p4_fields)
-    # printOrderedDict(h_mg.p4_fields)
     h_mg.p4_fields.update(h_r.p4_fields)
     h_mg.p4_fields.update(h_meta.p4_fields)
-    # printOrderedDict(h_mg.p4_fields)
 
     # 3.X2 merge p4 nodes
     print 'LOG|MERGE|X2 p4 nodes:'
-    # printOrderedDict(h_r.p4_nodes)
     h_mg.p4_nodes.update(h_r.p4_nodes)
     h_mg.p4_nodes.update(h_meta.p4_nodes)
-    # printOrderedDict(h_mg.p4_nodes)
 
     # 3.X3 merge conditional nodes
     print 'LOG|MERGE|X3 p4_conditional_nodes:'
-    # printOrderedDict(h_r.p4_conditional_nodes)
     h_mg.p4_conditional_nodes.update(h_r.p4_conditional_nodes)
     h_mg.p4_conditional_nodes.update(h_meta.p4_conditional_nodes)
-    # printOrderedDict(h_mg.p4_conditional_nodes)
+
 
     # 3.X4 merge calculated fields
     print 'LOG|MERGE|X4 calculated_fields'
@@ -1249,16 +1161,11 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.3 merge fields lists
     print 'LOG|MERGE|3 p4 feilds lists:'
     # ZP: this contains only one: ipv4_checksum_list
-    # printOrderedDict(h_r.p4_field_lists)
-    # printOrderedDict(h_mg.p4_field_lists)
     h_mg.p4_field_lists.update(h_r.p4_field_lists)
-    # printOrderedDict(h_mg.p4_field_lists)
 
     # 3.4 merge fields lists calculations
     print 'LOG|MERGE|4 p4_field_list_calculations:'
-    # printOrderedDict(h_r.p4_field_list_calculations )
     h_mg.p4_field_list_calculations.update(h_r.p4_field_list_calculations)
-    # printOrderedDict(h_mg.p4_field_list_calculations )
 
 
     ### 3.5 merge action 
@@ -1267,16 +1174,12 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.6 merge p4 action selectors
     # ZP: null
     print 'LOG|MERGE|6 p4_action_selectors:'
-    # printOrderedDict(h_r.p4_action_selectors)
     h_mg.p4_action_selectors.update(h_r.p4_action_selectors)
-    # printOrderedDict(h_mg.p4_action_selectors)
 
     # 3.7 merge action profiles
     print 'LOG|MERGE|7 action profiles:'
     # ZP: null
-    # printOrderedDict(h_r.p4_action_profiles)
     h_mg.p4_action_profiles.update(h_mg.p4_action_profiles)
-    # printOrderedDict(h_mg.p4_action_profiles)
 
 
     # 3.8 merge p4 tables
@@ -1285,21 +1188,16 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
 
     # 3.9 merge counters
     print 'LOG|MERGE|9 counters'
-    # printOrderedDict(h_r.p4_counters)
     h_mg.p4_counters.update(h_r.p4_counters)
-    # printOrderedDict(h_mg.p4_counters)
 
     # 3.10 merge meter
     print 'LOG|MERGE|10 meters'
-    # printOrderedDict(h_r.p4_meters)
     h_mg.p4_meters.update(h_r.p4_meters)
-    # printOrderedDict(h_mg.p4_meters )
+
 
     # 3.11 merge register
     print 'LOG|MERGE|11 register'
-    # printOrderedDict(h_r.p4_registers)
     h_mg.p4_registers.update(h_r.p4_registers)
-    # printOrderedDict(h_mg.p4_registers)
 
 
     ### 3.12 merge control flows
@@ -1313,9 +1211,7 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.13 merge parse value sets
     # ZP: null
     print 'LOG|MERGE|13 p4_parse_value_sets:'
-    # printOrderedDict(h_r.p4_parse_value_sets )
     h_mg.p4_parse_value_sets.update(h_r.p4_parse_value_sets)
-    # printOrderedDict(h_mg.p4_parse_value_sets )
 
 
     # 3.14 merge parse states
@@ -1325,9 +1221,7 @@ def SP4_AB_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.15 merge parser exceptions
     # ZP: null
     print 'LOG|MERGE|15 parser exceptions:'
-    # printOrderedDict(h_r.p4_parser_exceptions)
     h_mg.p4_parser_exceptions.update(h_r.p4_parser_exceptions)
-    # printOrderedDict(h_mg.p4_parser_exceptions)
 
     return h_mg
 
@@ -1358,10 +1252,6 @@ def DF_merge_p4_tables(h_mg, h_r, h_s, h_meta):
     print 'LOG|MERGE|  Shadow  tables:', h_s.p4_tables.keys()
     print 'LOG|MERGE|  Product tables:', h_r.p4_tables.keys()
     print 'LOG|MERGE|  Metadata tables:', h_meta.p4_tables.keys()
-
-    # print 'LOG|MERGE|  Shadow  nodes:', h_s.p4_nodes.keys()
-    # print 'LOG|MERGE|  Product nodes:', h_r.p4_nodes.keys()
-    # print 'LOG|MERGE|  Metadata nodes:', h_meta.p4_nodes.keys()
 
     h_mg.p4_tables.update(h_r.p4_tables)
     h_mg.p4_tables.update(h_meta.p4_tables)
@@ -1458,17 +1348,11 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # : ingress_metadata_SP4._padding
     # : ipv4.flags_SP4 ipv4.flags_SP4
     print 'LOG|MERGE|X1 p4 fields:'
-    # printOrderedDict(h_r.p4_fields)
-    # printOrderedDict(h_mg.p4_fields)
     h_mg.p4_fields.update(h_r.p4_fields)
     h_mg.p4_fields.update(h_meta.p4_fields)
-    # printOrderedDict(h_mg.p4_fields)
 
     # 3.X2 merge p4 nodes
     print 'LOG|MERGE|X2 p4 nodes:'
-    # printOrderedDict(h_r.p4_nodes)
-    # printOrderedDict(h_s.p4_nodes)
-    # printOrderedDict(h_meta.p4_nodes)
     print 'LOG|MERGE|  Shadow nodes:', h_s.p4_nodes.keys()
     print 'LOG|MERGE|  Product nodes:', h_r.p4_nodes.keys()
     print 'LOG|MERGE|  Metadata nodes:', h_meta.p4_nodes.keys()
@@ -1476,14 +1360,11 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     h_mg.p4_nodes.update(h_r.p4_nodes)
     h_mg.p4_nodes.update(h_meta.p4_nodes)
     print 'LOG|MERGE|  Merged nodes:', h_mg.p4_nodes.keys()
-    # printOrderedDict(h_mg.p4_nodes)
 
     # 3.X3 merge conditional nodes
     print 'LOG|MERGE|X3 p4_conditional_nodes:'
-    # printOrderedDict(h_r.p4_conditional_nodes)
     h_mg.p4_conditional_nodes.update(h_r.p4_conditional_nodes)
     h_mg.p4_conditional_nodes.update(h_meta.p4_conditional_nodes)
-    # printOrderedDict(h_mg.p4_conditional_nodes)
 
     # 3.X4 merge calculated fields
     print 'LOG|MERGE|X4 calculated_fields'
@@ -1510,16 +1391,11 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.3 merge fields lists
     print 'LOG|MERGE|3 p4 fields lists:'
     # ZP: this contains only one: ipv4_checksum_list
-    # printOrderedDict(h_r.p4_field_lists)
-    # printOrderedDict(h_mg.p4_field_lists)
     h_mg.p4_field_lists.update(h_r.p4_field_lists)
-    # printOrderedDict(h_mg.p4_field_lists)
 
     # 3.4 merge fields lists calculations
     print 'LOG|MERGE|4 p4_field_list_calculations:'
-    # printOrderedDict(h_r.p4_field_list_calculations )
     h_mg.p4_field_list_calculations.update(h_r.p4_field_list_calculations)
-    # printOrderedDict(h_mg.p4_field_list_calculations )
 
 
     ### 3.5 merge action 
@@ -1528,16 +1404,12 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.6 merge p4 action selectors
     # ZP: null
     print 'LOG|MERGE|6 p4_action_selectors:'
-    # printOrderedDict(h_r.p4_action_selectors)
     h_mg.p4_action_selectors.update(h_r.p4_action_selectors)
-    # printOrderedDict(h_mg.p4_action_selectors)
 
     # 3.7 merge action profiles
     print 'LOG|MERGE|7 action profiles:'
     # ZP: null
-    # printOrderedDict(h_r.p4_action_profiles)
     h_mg.p4_action_profiles.update(h_mg.p4_action_profiles)
-    # printOrderedDict(h_mg.p4_action_profiles)
 
 
     # 3.8 merge p4 tables
@@ -1546,21 +1418,15 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
 
     # 3.9 merge counters-
     print 'LOG|MERGE|9 counters'
-    # printOrderedDict(h_r.p4_counters)
     h_mg.p4_counters.update(h_r.p4_counters)
-    # printOrderedDict(h_mg.p4_counters)
 
     # 3.10 merge meter
     print 'LOG|MERGE|10 meters'
-    # printOrderedDict(h_r.p4_meters)
     h_mg.p4_meters.update(h_r.p4_meters)
-    # printOrderedDict(h_mg.p4_meters )
 
     # 3.11 merge register
     print 'LOG|MERGE|11 register'
-    # printOrderedDict(h_r.p4_registers)
     h_mg.p4_registers.update(h_r.p4_registers)
-    # printOrderedDict(h_mg.p4_registers)
 
 
     ### 3.12 merge control flows
@@ -1574,9 +1440,7 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.13 merge parse value sets
     # ZP: null
     print 'LOG|MERGE|13 p4_parse_value_sets:'
-    # printOrderedDict(h_r.p4_parse_value_sets )
     h_mg.p4_parse_value_sets.update(h_r.p4_parse_value_sets)
-    # printOrderedDict(h_mg.p4_parse_value_sets )
 
 
     # 3.14 merge parse states
@@ -1586,9 +1450,7 @@ def SP4_DF_merge_p4_objects(p4_v1_1, h_r, h_s, h_meta):
     # 3.15 merge parser exceptions
     # ZP: null
     print 'LOG|MERGE|15 parser exceptions:'
-    # printOrderedDict(h_r.p4_parser_exceptions)
     h_mg.p4_parser_exceptions.update(h_r.p4_parser_exceptions)
-    # printOrderedDict(h_mg.p4_parser_exceptions)
 
     return h_mg
 
