@@ -111,11 +111,12 @@ In this section, we give a step-by-step guide to demonstrate how to perform Diff
 
 - 3.0 Required dependencies
 
-To fully evaluate the ShadowP4 building and testing primitives, three dependencies are required:
+To fully evaluate the ShadowP4 building and testing primitives, several dependencies are required:
 <!-- - [p4-hlir](https://github.com/p4lang/p4-hlir/blob/master/README.md) -->
     - [p4c-bm](https://github.com/p4lang/p4c-bm)
     - [bmv2](https://github.com/p4lang/behavioral-model)
     - [mininet](https://github.com/mininet/mininet)
+    - tcpreply
 
 Make sure that the bmv2 target are installed in the `/usr/local/bin/` so that mininet can find it. Note that all the scripts are tested with Ubuntu 16.04 LTS.
 
@@ -185,11 +186,11 @@ xterm h1 h2 h3
 
 Second, we send testing traffic from `h1` to `h2` using tcpreply in xterm of `h1`:
 ```
-tcpreplay -i eth0 cases/pcap/h1_h2.pcap
+tcpreplay -i eth0 cases/pcap/h1-h2.pcap
 ```
 
 
-- 3.6 Dectect the difference in real time
+- 3.6 Detect the difference in real time
   
 We can observe the differential outputs from the controller port in `h3`. We can observe the output packet using either wireshark or tcpdump as follows:
 ```
@@ -205,6 +206,9 @@ sudo python tools/create_1sw_mininet.py --behavioral-exe /usr/local/bin/simple_s
 ```
 Then we can add the entries to the switch and test the throughput and latency using `iperf` tools. More detailed instructions will be available soon. Also feel free to test the overhead as you want.
 
+## 5. Heuristic algorithm evaluation
+
+More details and instructions are given in the file [mwis/README.md](mwis/README.md).
 
 ## To improve
 
