@@ -118,9 +118,9 @@ We can get the running time and accuracy of SA heuristic by comparing the result
 
 The running times of the three algorithms lie in `sum_res-*.txt` files. By comparing the running times of the three algorithms, we can find that SA heuristic has good efficiency for large graphs with even 1000 nodes: both SA heuristic and naive greedy can merge P4 programs graphs within seconds. However, BK optimal algorithm is not scalable with graph size: usually, it can not return results for large graphs with more than 80 nodes within 7 days.
 
-Figure 8 "The runtimes of three merging approaches" can be generated from the outputs. Specifically, results in Figure 8a 'real program runtime' can be generated from the data in files 1) `real_programs/sum_res-sa.txt` line 13-18; 2) `real_programs/sum_res-naive.txt` line 13-18; 3) `real_programs/sum_res-opt.txt`, which may take 1-2 days to produce. 
+Figure 8 "The runtimes of three merging approaches" can be generated from the outputs. Specifically, results in Figure 8a 'real program runtime' can be generated from the data in files 1) `real_programs/sum_res-sa.txt` line 26-31; 2) `real_programs/sum_res-naive.txt` line 26-31; 3) `real_programs/sum_res-opt.txt` where lines marked with 'total processing time' (it may take 1-2 days to produce this file). 
 
-Similarly, results in Figure 8b 'synthetic program runtime' can be generated from the three files under the folder `synth_programs`. 1) `synth_programs/sum_res-sa.txt` line 46-67; 2) `synth_programs/sum_res-naive.txt` line 46-67; 3) `synth_programs/sum_res-opt.txt`, which may also take days to produce. 
+Similarly, results in Figure 8b 'synthetic program runtime' can be generated from the three files under the folder `synth_programs`. 1) `synth_programs/sum_res-sa.txt` lines 46-67; 2) `synth_programs/sum_res-naive.txt` lines 46-67; 3) `synth_programs/sum_res-opt.txt`, which may also take days to produce. 
 
 
 - (2) Accuracy
