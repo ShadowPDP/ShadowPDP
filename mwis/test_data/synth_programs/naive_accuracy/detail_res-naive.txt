@@ -1,102 +1,107 @@
-./detail_res-opt.txt
-./detail_res-sa.txt
-./gen_graph.py
-./n30_0.1_gen.wmis
+./00-final/n30_0.1_gen.wmis
 Running naive greedy algorithm.
-- best weight: 4263
-- size: 15
-- solution: 0 1 2 4 8 12 16 17 19 21 23 25 27 28 29 
-- total processing time (s): 0.100043
+- best weight: 5275
+- size: 16
+- solution: 0 1 2 3 6 7 9 10 11 14 17 20 21 25 27 29 
+- total processing time (s): 0.10004
 
 
-./n30_0.2_gen.wmis
+./00-final/n30_0.2_gen.wmis
 Running naive greedy algorithm.
-- best weight: 3209
+- best weight: 2247
 - size: 12
-- solution: 0 3 5 7 9 13 15 17 19 21 24 26 
-- total processing time (s): 0.100039
-
-
-./n30_0.3_gen.wmis
-Running naive greedy algorithm.
-- best weight: 2103
-- size: 8
-- solution: 3 6 11 13 15 16 21 25 
-- total processing time (s): 0.100188
-
-
-./n30_0.4_gen.wmis
-Running naive greedy algorithm.
-- best weight: 2075
-- size: 6
-- solution: 2 5 12 13 14 18 
+- solution: 2 6 8 10 11 18 19 20 22 25 26 28 
 - total processing time (s): 0.1
 
 
-./n50_0.1_gen.wmis
+./00-final/n30_0.3_gen.wmis
 Running naive greedy algorithm.
-- best weight: 9490
-- size: 20
-- solution: 0 3 4 6 7 8 9 10 11 15 19 22 25 26 30 36 37 38 46 49 
-- total processing time (s): 0.100179
-
-
-./n50_0.2_gen.wmis
-Running naive greedy algorithm.
-- best weight: 5350
-- size: 15
-- solution: 0 1 4 8 10 14 16 19 20 26 30 33 43 45 48 
-- total processing time (s): 0.100051
-
-
-./n50_0.3_gen.wmis
-Running naive greedy algorithm.
-- best weight: 2201
-- size: 10
-- solution: 7 8 12 16 18 25 32 36 42 49 
-- total processing time (s): 0.100042
-
-
-./n50_0.4_gen.wmis
-Running naive greedy algorithm.
-- best weight: 3216
+- best weight: 1052
 - size: 8
-- solution: 1 6 11 23 28 31 42 49 
-- total processing time (s): 0.10003
+- solution: 0 7 10 19 22 25 26 29 
+- total processing time (s): 0.1
 
 
-./n80_0.1_gen.wmis
+./00-final/n30_0.4_gen.wmis
 Running naive greedy algorithm.
-- best weight: 4937
-- size: 27
-- solution: 12 14 15 19 21 28 33 34 35 39 41 46 47 56 58 62 63 65 67 69 71 72 73 74 76 77 79 
-- total processing time (s): 0.100034
+- best weight: 1129
+- size: 6
+- solution: 4 7 9 14 21 29 
+- total processing time (s): 0.100033
 
 
-./n80_0.2_gen.wmis
+./00-final/n50_0.1_gen.wmis
 Running naive greedy algorithm.
-- best weight: 1490
-- size: 16
-- solution: 19 23 29 30 36 40 43 44 50 57 60 61 63 64 67 79 
+- best weight: 4560
+- size: 21
+- solution: 0 6 7 8 12 14 19 20 21 22 24 26 32 34 35 36 40 41 44 45 49 
+- total processing time (s): 0.1
+
+
+./00-final/n50_0.2_gen.wmis
+Running naive greedy algorithm.
+- best weight: 2260
+- size: 14
+- solution: 7 11 15 19 20 23 24 26 28 35 40 43 46 48 
+- total processing time (s): 0.100073
+
+
+./00-final/n50_0.3_gen.wmis
+Running naive greedy algorithm.
+- best weight: 1167
+- size: 9
+- solution: 3 18 22 23 28 31 32 39 40 
+- total processing time (s): 0.100087
+
+
+./00-final/n50_0.4_gen.wmis
+Running naive greedy algorithm.
+- best weight: 1142
+- size: 7
+- solution: 5 23 24 31 43 47 49 
+- total processing time (s): 0.100036
+
+
+./00-final/n80_0.1_gen.wmis
+Running naive greedy algorithm.
+- best weight: 4771
+- size: 21
+- solution: 4 10 14 18 21 22 26 29 34 39 51 53 60 62 64 66 67 71 74 75 76 
+- total processing time (s): 0.100033
+
+
+./00-final/n80_0.2_gen.wmis
+Running naive greedy algorithm.
+- best weight: 1596
+- size: 14
+- solution: 3 23 30 37 42 43 46 49 54 57 65 66 69 74 
 - total processing time (s): 0.100035
 
 
-./n80_0.3_gen.wmis
+./00-final/n80_0.3_gen.wmis
 Running naive greedy algorithm.
-- best weight: 3433
-- size: 11
-- solution: 3 6 8 27 30 37 40 47 54 58 61 
+- best weight: 423
+- size: 12
+- solution: 26 28 33 43 48 51 54 58 61 66 68 72 
 - total processing time (s): 0.100038
 
 
-./n80_0.4_gen.wmis
+./00-final/n80_0.4_gen.wmis
 Running naive greedy algorithm.
-- best weight: 216
+- best weight: 338
 - size: 8
-- solution: 21 22 30 55 69 71 77 78 
-- total processing time (s): 0.100045
+- solution: 28 32 42 58 61 67 69 77 
+- total processing time (s): 0.100039
 
 
+./add_one_line_to_overall.py
+./detail_res-opt.txt
+./detail_res-sa.txt
+./gen_graph.py
+./get_data_plot.py
+./overall
+m_count = 0, m = -1 
+./reproduce_the_figure9b.py
 ./sum_res-sa.txt
 ./test_greedy_accuracy.sh
 ./test_synth_p4_naive.sh
