@@ -136,6 +136,11 @@ source test_greedy_accuracy.sh
 ``` 
 Here we can see the results in `naive_accuracy` folder: the lines 13-24 of files `synth_programs/naive_accuracy/sum_res-sa.txt` and `synth_programs/naive_accuracy/sum_res-naive.txt`. 
 
+Next, we can run the following command to extract results files and reproduce the figure 9a:
+```
+python reproduce_the_figure9b.py
+```
+
 Please note that each time we run the script `python gen_graph.py`, we will generate a different set of random graphs under the same parameters, such as density and size. A different set of the graphs may lead to slightly different runtime and accuracy, however, the conclusion always holds.
 
 
