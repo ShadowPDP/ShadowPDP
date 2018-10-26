@@ -122,6 +122,10 @@ Figure 8 "The runtimes of three merging approaches" can be generated from the ou
 
 Similarly, results in Figure 8b 'synthetic program runtime' can be generated from the three files under the folder `synth_programs`. 1) `synth_programs/sum_res-sa.txt` lines 46-67; 2) `synth_programs/sum_res-naive.txt` lines 46-67; 3) `synth_programs/sum_res-opt.txt`, which may also take days to produce. 
 
+We can use the following script to produce the runtime figure on synthetic like Figure 8b:
+```
+python plot_synth_runtime.py
+```
 
 - (2) Accuracy
 
